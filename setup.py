@@ -8,7 +8,7 @@ setup(
     version='0.1',
     author='Peter Wittek',
     author_email='peterwittek@users.noreply.github.com',
-    scripts=['scripts/bibpain'],
+    scripts=['scripts/bibpain.py'],
     url='https://github.com/peterwittek/bibpain/',
     keywords='bibtex doi arxiv',
     license='LICENSE',
