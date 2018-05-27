@@ -11,13 +11,17 @@ There are two ways of invoking the script:
 
 1. Passing the identifier as an argument:
 
-    $ bibpain.py arXivID
-    $ bibpain.py DOI
+```bash
+$ bibpain.py arXivID
+$ bibpain.py DOI
+```
 
 The arXiv ID should come without “arXiv:” and without version information. The DOI should be the actual DOI, and not the URL to the resolver.
 
 2. Pasting from the clipboard:
 
-    $ bibpain.py | xclip -selection clipboard
+```bash
+$ bibpain.py | xclip -selection clipboard
+```
 
 This is useful if you want to assign a keyboard shortcut to using it.
