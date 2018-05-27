@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Created on Thu Jan  1 15:19:30 2015"""
 import os
@@ -10,10 +11,11 @@ import urllib
 from utf8tobibtex import utf8_to_bibtex
 from arxiv2bib import ATOM, arxiv2bib
 
-ARXIV_CATEGORIES = ["astro-ph", "cond-mat", "gr-qc", "hep-ex", "hep-lat",
-                    "hep-ph", "hep-th", "math-ph", "nlin", "nucl-ex",
-                    "nucl-th", "physics", "quant-ph", "math", "q-bio", "q-fin",
-                    "stat"]
+ARXIV_CATEGORIES = [
+    "astro-ph", "cond-mat", "gr-qc", "hep-ex", "hep-lat", "hep-ph", "hep-th",
+    "math-ph", "nlin", "nucl-ex", "nucl-th", "physics", "quant-ph", "math",
+    "q-bio", "q-fin", "stat"
+]
 
 
 def check_categories(text):
@@ -58,12 +60,12 @@ def normalize(text_):
     first_author = None
     author_line = re.findall("author[^\n]*", text)
     if author_line != []:
-        author_list = author_line[0][author_line[0].find("{")+1:-2]
+        author_list = author_line[0][author_line[0].find("{") + 1:-2]
         authors = author_list.split(" and ")
         if "," in authors[0]:
             first_author = authors[0][:authors[0].find(",")]
         else:
-            first_author = authors[0][authors[0].rindex(" ")+1:]
+            first_author = authors[0][authors[0].rindex(" ") + 1:]
         first_author = first_author.lower()
     first_title_word = None
     title_line = re.findall("title[^\n]*", text)
@@ -90,11 +92,11 @@ def normalize(text_):
 
 
 def find_file(name):
-    base_dir =  os.getcwd()
+    base_dir = os.getcwd()
     for root, dirs, files in os.walk(base_dir):
         if name in files:
             filename = os.path.join(root, name)
-            return "	file = {" + filename[len(base_dir)+1:] + "},"
+            return "	file = {" + filename[len(base_dir) + 1:] + "},"
 
 
 def postprocess_arxiv(entry):
@@ -105,14 +107,11 @@ def postprocess_arxiv(entry):
         url = url[:-2]
     if len(entry.doi) == 0:
         lines = ["@article{" + get_bibid_for_arxiv(entry)]
-        for k, v in [("  author", " and ".join(entry.authors)),
-                     ("  title", entry.title),
-                     ("  archiveprefix", "arXiv"),
-                     ("  eprint", id_),
-                     ("  year", entry.year),
-                     ("  note", entry.note),
-                     ("  abstract", entry.summary)
-                     ]:
+        for k, v in [("  author", " and ".join(entry.authors)), ("  title",
+                                                                 entry.title),
+                     ("  archiveprefix",
+                      "arXiv"), ("  eprint", id_), ("  year", entry.year),
+                     ("  note", entry.note), ("  abstract", entry.summary)]:
             if len(v):
                 lines.append("%-13s = {%s}" % (k, v))
         return ("," + os.linesep).join(lines) + os.linesep + "}"
@@ -120,7 +119,8 @@ def postprocess_arxiv(entry):
         result = doi2bib(entry.doi)[:-2] + ","
         result += "," + os.linesep + "  archiveprefix = {arXiv}"
         result += "," + os.linesep + "%-13s = {%s}" % ("  eprint", id_)
-        result += "," + os.linesep + "%-13s = {%s}" % ("  abstract", entry.summary)
+        result += "," + os.linesep + "%-13s = {%s}" % ("  abstract",
+                                                       entry.summary)
         return result + os.linesep + "}"
 
 
@@ -131,14 +131,14 @@ def process_id(id_):
     id_lower = processed_id.lower()
     category = check_categories(processed_id)
     if "iv:" in id_lower:
-        processed_id = id_lower[id_lower.index(":")+1:]
+        processed_id = id_lower[id_lower.index(":") + 1:]
     elif "iv.org" in id_lower:
         if category is not None:
             processed_id = id_lower[id_lower.index(category):]
         else:
-            processed_id = id_lower[id_lower.rindex("/")+1:]
+            processed_id = id_lower[id_lower.rindex("/") + 1:]
     elif "doi.org" in id_lower:
-        processed_id = processed_id[id_lower.index("doi.org/")+8:]
+        processed_id = processed_id[id_lower.index("doi.org/") + 8:]
     regexp = re.compile(r'[a-zA-Z]+[0-9]+[a-zA-Z]+')
     if regexp.search(processed_id):
         return find_file(processed_id + ".pdf")
