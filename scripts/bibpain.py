@@ -116,7 +116,7 @@ def postprocess_arxiv(entry):
                 lines.append("%-13s = {%s}" % (k, v))
         return ("," + os.linesep).join(lines) + os.linesep + "}"
     else:
-        result = doi2bib(entry.doi)[:-2] + ","
+        result = doi2bib(entry.doi)[:-2]
         result += "," + os.linesep + "  archiveprefix = {arXiv}"
         result += "," + os.linesep + "%-13s = {%s}" % ("  eprint", id_)
         result += "," + os.linesep + "%-13s = {%s}" % ("  abstract",
