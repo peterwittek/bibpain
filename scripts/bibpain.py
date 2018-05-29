@@ -149,7 +149,6 @@ def process_id(id_):
     else:
         bibtex = postprocess_arxiv(arxiv2bib([processed_id])[0])
     return normalize(bibtex)
-    return bibtex
 
 
 if __name__ == "__main__":
